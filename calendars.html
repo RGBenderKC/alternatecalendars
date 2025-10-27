@@ -1,0 +1,500 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+	<head>
+		<meta charset="UTF-g" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Global Calendar Dashboard</title>
+		<!-- Load Tailwind CSS -->
+		<script src="https://cdn.tailwindcss.com"></script>
+		<!-- Use Inter font -->
+		<link rel="preconnect" href="https://fonts.googleapis.com" />
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+		<link
+			href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"
+			rel="stylesheet"
+		/>
+		<style>
+			body {
+				font-family: "Inter", sans-serif;
+				background-color: #111827; /* bg-gray-900 */
+			}
+			/* Custom styles for dark mode date picker */
+			input[type="date"] {
+				background-color: #374151; /* bg-gray-700 */
+				color: #f9fafb; /* text-gray-50 */
+				border: 1px solid #4b5563; /* border-gray-600 */
+				border-radius: 0.5rem; /* rounded-lg */
+				padding: 0.5rem 0.75rem;
+			}
+			input[type="date"]::-webkit-calendar-picker-indicator {
+				filter: invert(1);
+			}
+		</style>
+	</head>
+	<body class="text-gray-50 min-h-screen p-4 sm:p-8">
+		<div class="max-w-7xl mx-auto">
+			<!-- Header -->
+			<header class="mb-8">
+				<h1 class="text-3xl sm:text-4xl font-bold text-center text-white">
+					Global Calendar Dashboard
+				</h1>
+				<p class="text-center text-lg text-gray-400 mt-2">
+					Test drive alternative calendar systems.
+				</p>
+			</header>
+
+			<!-- Date Controls -->
+			<div
+				class="flex flex-col sm:flex-row justify-center items-center gap-4 mb-8 p-4 bg-gray-800 rounded-lg shadow-xl"
+			>
+				<label for="datePicker" class="font-semibold text-lg"
+					>Select a Date:</label
+				>
+				<input type="date" id="datePicker" class="max-w-xs" />
+				<button
+					id="todayButton"
+					class="w-full sm:w-auto bg-indigo-600 hover:bg-indigo-700 text-white font-semibold py-2 px-4 rounded-lg transition-colors duration-200"
+				>
+					Go to Today
+				</button>
+			</div>
+
+			<!-- Calendar Grid -->
+			<div
+				id="calendarGrid"
+				class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
+			>
+				<!-- Card: Current Gregorian Time -->
+				<div
+					class="bg-gray-800 p-6 rounded-lg shadow-lg border border-gray-700"
+				>
+					<h2 class="text-2xl font-bold mb-4 text-white">
+						Current (Gregorian)
+					</h2>
+					<div class="text-center">
+						<div id="gregorian-time" class="text-5xl font-bold text-indigo-400">
+							--:--:--
+						</div>
+						<div id="gregorian-date-live" class="text-xl text-gray-300 mt-2">
+							Loading...
+						</div>
+					</div>
+					<hr class="border-gray-700 my-4" />
+					<p class="text-sm text-gray-400">
+						This card shows the current live time. The cards below reflect the
+						date selected in the date picker.
+					</p>
+				</div>
+
+				<!-- Card: International Fixed Calendar -->
+				<div
+					class="bg-gray-800 p-6 rounded-lg shadow-lg border border-gray-700"
+				>
+					<h2 class="text-2xl font-bold mb-4 text-white">
+						International Fixed
+					</h2>
+					<div class="text-center">
+						<div id="ifc-day" class="text-5xl font-bold text-teal-400">--</div>
+						<div id="ifc-month" class="text-2xl text-gray-300 mt-1">--</div>
+						<div id="ifc-year" class="text-xl text-gray-400 mt-1">Year --</div>
+					</div>
+					<hr class="border-gray-700 my-4" />
+					<p class="text-sm text-gray-400">
+						13 months (with "Sol" after June), 28 days each. Every date is the
+						same day of the week, every year.
+					</p>
+				</div>
+
+				<!-- Card: Hanke-Henry Permanent -->
+				<div
+					class="bg-gray-800 p-6 rounded-lg shadow-lg border border-gray-700"
+				>
+					<h2 class="text-2xl font-bold mb-4 text-white">
+						Hanke-Henry Permanent
+					</h2>
+					<div class="text-center">
+						<div id="hhpc-day" class="text-5xl font-bold text-amber-400">
+							--
+						</div>
+						<div id="hhpc-month" class="text-2xl text-gray-300 mt-1">--</div>
+						<div id="hhpc-year" class="text-xl text-gray-400 mt-1">Year --</div>
+					</div>
+					<hr class="border-gray-700 my-4" />
+					<p class="text-sm text-gray-400">
+						4 identical quarters. Months are 30, 30, 31 days. Dates are fixed to
+						weekdays.
+					</p>
+				</div>
+
+				<!-- Card: Hebrew Calendar -->
+				<div
+					class="bg-gray-800 p-6 rounded-lg shadow-lg border border-gray-700"
+				>
+					<h2 class="text-2xl font-bold mb-4 text-white">Hebrew Calendar</h2>
+					<div class="text-center">
+						<div id="hebrew-day" class="text-5xl font-bold text-sky-400">
+							--
+						</div>
+						<div id="hebrew-month" class="text-2xl text-gray-300 mt-1">--</div>
+						<div id="hebrew-year" class="text-xl text-gray-400 mt-1">
+							Year --
+						</div>
+					</div>
+					<hr class="border-gray-700 my-4" />
+					<p class="text-sm text-gray-400">
+						A lunisolar calendar. Months follow the moon, with a leap month
+						added 7 times in 19 years to sync with the solar seasons.
+					</p>
+				</div>
+
+				<!-- Card: Islamic (Hijri) Calendar -->
+				<div
+					class="bg-gray-800 p-6 rounded-lg shadow-lg border border-gray-700"
+				>
+					<h2 class="text-2xl font-bold mb-4 text-white">Islamic (Hijri)</h2>
+					<div class="text-center">
+						<div id="islamic-day" class="text-5xl font-bold text-emerald-400">
+							--
+						</div>
+						<div id="islamic-month" class="text-2xl text-gray-300 mt-1">--</div>
+						<div id="islamic-year" class="text-xl text-gray-400 mt-1">
+							Year -- AH
+						</div>
+					</div>
+					<hr class="border-gray-700 my-4" />
+					<p class="text-sm text-gray-400">
+						A pure lunar calendar. Months follow the moon's phases, causing the
+						calendar to "drift" through the seasons (10-11 days shorter than a
+						solar year).
+					</p>
+				</div>
+
+				<!-- Card: Persian (Solar Hijri) -->
+				<div
+					class="bg-gray-800 p-6 rounded-lg shadow-lg border border-gray-700"
+				>
+					<h2 class="text-2xl font-bold mb-4 text-white">
+						Persian (Solar Hijri)
+					</h2>
+					<div class="text-center">
+						<div id="persian-day" class="text-5xl font-bold text-rose-400">
+							--
+						</div>
+						<div id="persian-month" class="text-2xl text-gray-300 mt-1">--</div>
+						<div id="persian-year" class="text-xl text-gray-400 mt-1">
+							Year -- SH
+						</div>
+					</div>
+					<hr class="border-gray-700 my-4" />
+					<p class="text-sm text-gray-400">
+						A highly accurate solar calendar. The new year begins at the exact
+						moment of the Vernal (Spring) Equinox.
+					</p>
+				</div>
+			</div>
+			<!-- /#calendarGrid -->
+		</div>
+		<!-- /max-w-7xl -->
+
+		<script>
+			// --- DOM Elements ---
+			const datePicker = document.getElementById("datePicker");
+			const todayButton = document.getElementById("todayButton");
+			const liveTimeEl = document.getElementById("gregorian-time");
+			const liveDateEl = document.getElementById("gregorian-date-live");
+
+			// --- Element References for Updates ---
+			const elements = {
+				ifc: {
+					day: document.getElementById("ifc-day"),
+					month: document.getElementById("ifc-month"),
+					year: document.getElementById("ifc-year"),
+				},
+				hhpc: {
+					day: document.getElementById("hhpc-day"),
+					month: document.getElementById("hhpc-month"),
+					year: document.getElementById("hhpc-year"),
+				},
+				hebrew: {
+					day: document.getElementById("hebrew-day"),
+					month: document.getElementById("hebrew-month"),
+					year: document.getElementById("hebrew-year"),
+				},
+				islamic: {
+					day: document.getElementById("islamic-day"),
+					month: document.getElementById("islamic-month"),
+					year: document.getElementById("islamic-year"),
+				},
+				persian: {
+					day: document.getElementById("persian-day"),
+					month: document.getElementById("persian-month"),
+					year: document.getElementById("persian-year"),
+				},
+			};
+
+			// --- Constants ---
+			const IFC_MONTHS = [
+				"January",
+				"February",
+				"March",
+				"April",
+				"May",
+				"June",
+				"Sol",
+				"July",
+				"August",
+				"September",
+				"October",
+				"November",
+				"December",
+			];
+			const HHPC_MONTHS = [
+				["January", "February", "March"],
+				["April", "May", "June"],
+				["July", "August", "September"],
+				["October", "November", "December"],
+			];
+
+			// --- Helper Functions ---
+
+			/**
+			 * Calculates the day of the year (1-366)
+			 * @param {Date} date - The input date object
+			 * @returns {number} Day of the year
+			 */
+			function getDayOfYear(date) {
+				const start = new Date(date.getFullYear(), 0, 0);
+				const diff = date - start;
+				const oneDay = 1000 * 60 * 60 * 24;
+				return Math.floor(diff / oneDay);
+			}
+
+			/**
+			 * Checks if a given year is a Gregorian leap year
+			 * @param {number} year - The year to check
+			 * @returns {boolean} True if it's a leap year
+			 */
+			function isLeapYear(year) {
+				return (year % 4 === 0 && year % 100 !== 0) || year % 400 === 0;
+			}
+
+			// --- Calendar Calculation Functions ---
+
+			/**
+			 * Calculates the International Fixed Calendar date
+			 * @param {Date} date - The input Gregorian date
+			 */
+			function updateIFC(date) {
+				const year = date.getFullYear();
+				const doy = getDayOfYear(date);
+				const leap = isLeapYear(year);
+
+				let month, day;
+
+				if (leap && doy === 366) {
+					month = "Leap Day";
+					day = "";
+				} else if (!leap && doy === 365) {
+					month = "Year Day";
+					day = "";
+				} else if (leap && doy === 169) {
+					// June 17th in a leap year is "Leap Day" in some variants, but we'll treat it as part of Sol
+					const monthIndex = 6; // Sol
+					month = IFC_MONTHS[monthIndex];
+					day = doy - monthIndex * 28;
+				} else {
+					// Adjust for leap day insertion after June
+					let effectiveDoy = doy;
+					if (leap && doy > 169) {
+						effectiveDoy--;
+					}
+					const monthIndex = Math.floor((effectiveDoy - 1) / 28);
+					month = IFC_MONTHS[monthIndex];
+					day = ((effectiveDoy - 1) % 28) + 1;
+				}
+
+				// Simplified logic (Kodak variant)
+				// 13 months of 28 days = 364.
+				// Day 365 is "Year Day". Day 366 is "Leap Day".
+				const doySimple = getDayOfYear(date);
+				const yearSimple = date.getFullYear();
+
+				if (doySimple === 365 && !isLeapYear(yearSimple)) {
+					elements.ifc.day.innerText = "Year";
+					elements.ifc.month.innerText = "Day";
+				} else if (doySimple === 365 && isLeapYear(yearSimple)) {
+					// In a leap year, day 365 is Dec 28
+					elements.ifc.day.innerText = 28;
+					elements.ifc.month.innerText = "December";
+				} else if (doySimple === 366) {
+					// Day 366 is "Leap Day"
+					elements.ifc.day.innerText = "Leap";
+					elements.ifc.month.innerText = "Day";
+				} else {
+					const monthIndex = Math.floor((doySimple - 1) / 28);
+					elements.ifc.day.innerText = ((doySimple - 1) % 28) + 1;
+					elements.ifc.month.innerText = IFC_MONTHS[monthIndex];
+				}
+				elements.ifc.year.innerText = `Year ${yearSimple}`;
+			}
+
+			/**
+			 * Calculates the Hanke-Henry Permanent Calendar date
+			 * @param {Date} date - The input Gregorian date
+			 */
+			function updateHHPC(date) {
+				const year = date.getFullYear();
+				const doy = getDayOfYear(date);
+
+				// Days 1-364 are in the regular calendar
+				if (doy <= 364) {
+					const quarter = Math.floor((doy - 1) / 91); // 0-3
+					const dayInQuarter = (doy - 1) % 91; // 0-90
+
+					let month, day;
+					if (dayInQuarter < 30) {
+						// First month (30 days)
+						month = HHPC_MONTHS[quarter][0];
+						day = dayInQuarter + 1;
+					} else if (dayInQuarter < 60) {
+						// Second month (30 days)
+						month = HHPC_MONTHS[quarter][1];
+						day = dayInQuarter - 30 + 1;
+					} else {
+						// Third month (31 days)
+						month = HHPC_MONTHS[quarter][2];
+						day = dayInQuarter - 60 + 1;
+					}
+					elements.hhpc.day.innerText = day;
+					elements.hhpc.month.innerText = month;
+				} else {
+					// Day 365/366 is part of the "Xtra" week in leap week years.
+					// The rule is complex, so we'll just label it.
+					elements.hhpc.day.innerText = "Xtra";
+					elements.hhpc.month.innerText = "Mini-Month";
+				}
+				elements.hhpc.year.innerText = `Year ${year}`;
+			}
+
+			/**
+			 * Uses Intl.DateTimeFormat to update calendars
+			 * @param {Date} date - The input Gregorian date
+			 * @param {string} calendarName - 'hebrew', 'islamic', 'persian'
+			 * @param {object} elMap - The element map (e.g., elements.hebrew)
+			 */
+			function updateIntlCalendar(date, calendarName, elMap) {
+				try {
+					const options = {
+						calendar: calendarName,
+						year: "numeric",
+						month: "long",
+						day: "numeric",
+					};
+					const formatter = new Intl.DateTimeFormat(
+						`en-u-ca-${calendarName}`,
+						options
+					);
+					const parts = formatter.formatToParts(date);
+
+					let day, month, year;
+					parts.forEach((part) => {
+						switch (part.type) {
+							case "day":
+								day = part.value;
+								break;
+							case "month":
+								month = part.value;
+								break;
+							case "year":
+								year = part.value; // Includes era (e.g., "5786 AM" or "1447 AH")
+								break;
+						}
+					});
+
+					elMap.day.innerText = day || "--";
+					elMap.month.innerText = month || "Error";
+					elMap.year.innerText = year || "--";
+				} catch (e) {
+					console.error(`Error formatting ${calendarName}:`, e);
+					elMap.day.innerText = "??";
+					elMap.month.innerText = "Error";
+					elMap.year.innerText = "N/A";
+				}
+			}
+
+			// --- Main Update Functions ---
+
+			/**
+			 * Updates the live Gregorian clock
+			 */
+			function updateLiveClock() {
+				const now = new Date();
+				liveTimeEl.innerText = now.toLocaleTimeString("en-US");
+				liveDateEl.innerText = now.toLocaleDateString("en-US", {
+					weekday: "long",
+					year: "numeric",
+					month: "long",
+					day: "numeric",
+				});
+			}
+
+			/**
+			 * Updates all calendar cards based on the selected date
+			 * @param {Date} selectedDate - The date from the picker
+			 */
+			function updateAllCalendars(selectedDate) {
+				// Create a new Date object at midnight in the local timezone
+				const date = new Date(
+					selectedDate.getFullYear(),
+					selectedDate.getMonth(),
+					selectedDate.getDate()
+				);
+
+				updateIFC(date);
+				updateHHPC(date);
+				updateIntlCalendar(date, "hebrew", elements.hebrew);
+				updateIntlCalendar(date, "islamic", elements.islamic);
+				updateIntlCalendar(date, "persian", elements.persian);
+			}
+
+			/**
+			 * Sets the date picker to today and updates
+			 */
+			function setToday() {
+				const today = new Date();
+				// Format for date picker (YYYY-MM-DD)
+				const yyyy = today.getFullYear();
+				const mm = String(today.getMonth() + 1).padStart(2, "0");
+				const dd = String(today.getDate()).padStart(2, "0");
+				datePicker.value = `${yyyy}-${mm}-${dd}`;
+
+				updateAllCalendars(today);
+			}
+
+			// --- Event Listeners ---
+
+			// Update on date picker change
+			datePicker.addEventListener("change", () => {
+				if (datePicker.value) {
+					// Date picker value is 'YYYY-MM-DD', which JS new Date() interprets as UTC.
+					// To interpret as local, split it.
+					const parts = datePicker.value.split("-").map(Number);
+					const selectedDate = new Date(parts[0], parts[1] - 1, parts[2]);
+					updateAllCalendars(selectedDate);
+				}
+			});
+
+			// "Go to Today" button
+			todayButton.addEventListener("click", setToday);
+
+			// --- Initial Load ---
+
+			// Start the live clock
+			updateLiveClock();
+			setInterval(updateLiveClock, 1000);
+
+			// Set initial state to today
+			setToday();
+		</script>
+	</body>
+</html>
