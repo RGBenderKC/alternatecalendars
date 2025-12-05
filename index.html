@@ -484,30 +484,43 @@
 			// ---------------------------------------------------
 			// UTC CLOCK
 			// ---------------------------------------------------
+
+
+
 			function updateUTCClock() {
+				// 1️⃣ Grab the current instant
 				const now = new Date();
 
-				// ── time (UTC) ───────────────────────────────────────
+				// 2️⃣ Format the **time** in UTC (24‑hour, zero‑padded)
 				const time = now.toLocaleTimeString('en-GB', {
 					hour12: false,
 					hour: '2-digit',
 					minute: '2-digit',
 					second: '2-digit',
-					timeZone: 'UTC' // force UTC
+					timeZone: 'UTC' // <-- force UTC
 				});
 
-				// ── date (UTC) ───────────────────────────────────────
+				// 3️⃣ Format the **date** in UTC (human‑readable)
 				const date = now.toLocaleDateString('en-US', {
 					weekday: 'long',
 					year: 'numeric',
 					month: 'long',
 					day: 'numeric',
-					timeZone: 'UTC' // force UTC
+					timeZone: 'UTC' // <-- force UTC
 				});
 
+				// 4️⃣ Write the results into the page
 				document.getElementById('utc-time').innerText = time;
 				document.getElementById('utc-date').innerText = date;
 			}
+
+			/* ---------------------------------------------------
+			   Initialise the clock
+			   --------------------------------------------------- */
+			// Run immediately so the UI isn’t blank for a second
+			updateUTCClock();
+			// Then keep it ticking every 1 000 ms
+			setInterval(updateUTCClock, 1000);
 
 
 			// ---------------------------------------------------
