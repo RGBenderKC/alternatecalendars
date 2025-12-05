@@ -480,32 +480,38 @@
 
 			// Set initial state to today
 			setToday();
-		</script>
 
-		<script>
 			// ---------------------------------------------------
-			// 1️⃣ UTC CLOCK
+			// UTC CLOCK
 			// ---------------------------------------------------
 			function updateUTCClock() {
 				const now = new Date();
+
+				// ── time (UTC) ───────────────────────────────────────
 				const time = now.toLocaleTimeString('en-GB', {
 					hour12: false,
-					hour: "2-digit",
-					minute: "2-digit",
-					second: "2-digit",
-					timeZone: 'UTC'
+					hour: '2-digit',
+					minute: '2-digit',
+					second: '2-digit',
+					timeZone: 'UTC' // force UTC
 				});
+
+				// ── date (UTC) ───────────────────────────────────────
+				const date = now.toLocaleDateString('en-US', {
+					weekday: 'long',
+					year: 'numeric',
+					month: 'long',
+					day: 'numeric',
+					timeZone: 'UTC' // force UTC
+				});
+
 				document.getElementById('utc-time').innerText = time;
 				document.getElementById('utc-date').innerText = date;
 			}
 
-			// Run once now and then every second
-			updateUTCClock();
-			setInterval(updateUTCClock, 1000);
-
 
 			// ---------------------------------------------------
-			// 2️⃣ WEATHER SECTION
+			// WEATHER
 			// ---------------------------------------------------
 			const OWM_API_KEY = 'cd2aea923ec747fe5285abd153914e3b';
 
